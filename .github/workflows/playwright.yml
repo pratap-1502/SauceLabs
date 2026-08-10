@@ -8,8 +8,11 @@ on:
     branches: [main, master]
 
   schedule:
-    # 11:30 PM UTC = 5:00 AM IST
-    - cron: '30 23 * * *'
+    # Runs every day at 5:08 AM IST (11:38 PM UTC)
+    - cron: '38 23 * * *'
+
+  # Allows manual execution from GitHub Actions
+  workflow_dispatch:
 
 jobs:
   test:
