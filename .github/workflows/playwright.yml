@@ -8,11 +8,22 @@ on:
     branches: [main, master]
 
   schedule:
-    # Runs every day at 5:08 AM IST (11:38 PM UTC)
-    - cron: '38 23 * * *'
+    # Runs every day at 5:25 AM IST (11:55 PM UTC)
+    - cron: '55 23 * * *'
 
-  # Allows manual execution from GitHub Actions
+  # Allows manual execution with test suite selection
   workflow_dispatch:
+    inputs:
+      test_suite:
+        description: 'Select test suite to run'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - smoke
+          - sanity
+          - regression
 
 jobs:
   test:
@@ -32,9 +43,27 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Run Playwright tests
+      # Push, PR, scheduled run, or manually selecting "all"
+      - name: Run All Tests
+        if: github.event_name != 'workflow_dispatch' || inputs.test_suite == 'all'
         run: npx playwright test
 
+      # Manual Smoke execution
+      - name: Run Smoke Tests
+        if: github.event_name == 'workflow_dispatch' && inputs.test_suite == 'smoke'
+        run: npx playwright test --grep @smoke
+
+      # Manual Sanity execution
+      - name: Run Sanity Tests
+        if: github.event_name == 'workflow_dispatch' && inputs.test_suite == 'sanity'
+        run: npx playwright test --grep @sanity
+
+      # Manual Regression execution
+      - name: Run Regression Tests
+        if: github.event_name == 'workflow_dispatch' && inputs.test_suite == 'regression'
+        run: npx playwright test --grep @regression
+
+      # Upload Playwright HTML report
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
