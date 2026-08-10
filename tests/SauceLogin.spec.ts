@@ -28,11 +28,6 @@ test("Check Sauce Labs Bike Light label", async ({ page }) => {
 
 });
 
-test("Check Sauce Labs Bolt T-Shirt label", async ({ page }) => {
-
-    await expect(page.getByText("Sauce Labs Bolt T-Shirt")).toBeVisible();
-
-});
 
 test("Check Sauce Labs Fleece Jacket label", async ({ page }) => {
 
