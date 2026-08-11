@@ -39,3 +39,15 @@ test("Check Sauce Labs Fleece Jacket label", { tag: "@regression" }, async ({ pa
     await expect(page.getByText("Sauce Labs Fleece Jacket")).toBeVisible();
 
 });
+
+test("Check product sort dropdown", { tag: "@regression" }, async ({ page }) => {
+
+    await expect(page.locator(".product_sort_container")).toBeVisible();
+
+});
+
+test("Check first Add to cart button", { tag: "@smoke" }, async ({ page }) => {
+
+    await expect(page.getByRole("button", { name: "Add to cart" }).first()).toBeVisible();
+
+});
